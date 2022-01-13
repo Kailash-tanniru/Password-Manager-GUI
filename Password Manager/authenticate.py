@@ -136,6 +136,7 @@ class Authenticate:
         #=====PROFESSION=====#
         profession = StringVar()
         profession.set("")
+       
 
         self.prof_detail = Label(self.form_body_frame,text="COMPANY/ORGANIZATION",font=("Courier",20,),fg='black',bg='white')
         self.prof_detail.place(x=40,y=130)
@@ -146,10 +147,11 @@ class Authenticate:
         #=====Age====#
         Age  = StringVar()
         Age.set("")
+        
 
         self.age = Label(self.form_body_frame,text="AGE",font=("Courier",20,),fg='black',bg='white')
         self.age.place(x=40,y=230)
-        self.age_spinbox = Spinbox(self.form_body_frame,from_=17,to_=60,textvariable=Age)
+        self.age_spinbox = Spinbox(self.form_body_frame,from_=18,to_=60,textvariable=Age)
         self.age_spinbox.place(x=40,y=270)
 
         #===Gender==#
@@ -158,13 +160,13 @@ class Authenticate:
         self.gender_label = Label(self.form_body_frame,text="GENDER",font=("Courier",20,),fg='black',bg='white')
         self.gender_label.place(x=360,y=230)
 
-        self.male = Radiobutton(self.form_body_frame,text='MALE',variable=gender,value='1',font=("Roman",15,),bg='white')
+        self.male = Radiobutton(self.form_body_frame,text='MALE',variable=gender,value=1,font=("Roman",15,),bg='white')
         self.male.place(x=360,y=270)
 
-        self.female = Radiobutton(self.form_body_frame,text='FEMALE',variable=gender,value='2',font=("Roman",15,),bg='white')
+        self.female = Radiobutton(self.form_body_frame,text='FEMALE',variable=gender,value=2,font=("Roman",15,),bg='white')
         self.female.place(x=460,y=270)
 
-        self.others = Radiobutton(self.form_body_frame,text='OTHERS',variable=gender,value='3',font=("Roman",15,),bg='white')
+        self.others = Radiobutton(self.form_body_frame,text='OTHERS',variable=gender,value=3,font=("Roman",15,),bg='white')
         self.others.place(x=560,y=270)
 
         #Password
@@ -198,14 +200,13 @@ class Authenticate:
             messagebox.showwarning('Password',"Password Doesn't Match!Please Confirm Password")
         elif f.get()==g.get():
             name = a.get()+' '+b.get()
-            if(e.get()=='1'):
+            if(e.get()==1):
                 gender  = 'male'
-            elif(e.get()=='2'):
+            elif(e.get()==2):
                 gender = 'female'
-            elif(e.get()=='3'):
-                gender = 'Others'
             else:
-                gender=''
+                gender = 'Others'
+            
     
             
             self.database.insert_into_db(name,c.get(),d.get(),gender,f.get())
