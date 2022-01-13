@@ -1,3 +1,4 @@
+
 from tkinter import *
 
 from PIL import ImageTk
@@ -6,6 +7,8 @@ from tkinter import font
 from tkmacosx import Button #if macos
 from PasswordManager import App
 
+from backend import DB
+from tkinter import messagebox
 
 
 class Authenticate:
@@ -15,6 +18,10 @@ class Authenticate:
         self.frame = Frame(self.root,width=w,height=h,bg='#FFCCD2')
         self.frame.propagate(0)
         self.frame.pack()
+
+        #Create Database
+        self.database = DB()
+        self.database.create_db()
         # self.bg = ImageTk.PhotoImage(file="bg.jpg")
         # self.bg_image = Label(self.root,image=self.bg).place(x=0,y=0)
         self.login()        
@@ -79,8 +86,8 @@ class Authenticate:
         self.signup_frame.resizable(False,False)
 
         
-        self.bg = ImageTk.PhotoImage(file="bg.jpg")
-        self.bg_image = Label(self.signup_frame,image=self.bg).place(x=0,y=0,relheight=1,relwidth=1)
+        # self.bg = ImageTk.PhotoImage(file="bg.jpg")
+        # self.bg_image = Label(self.signup_frame,image=self.bg).place(x=0,y=0,relheight=1,relwidth=1)
 
         self.signin_register_frame = Frame(self.signup_frame,width=700,height=670)
         self.signin_register_frame.propagate(0)
@@ -105,6 +112,9 @@ class Authenticate:
         #String variables 
         first_name = StringVar()
         last_name = StringVar()
+        
+        first_name.set("")
+        last_name.set("")
 
         #First name
         self.first_name = Label(self.form_body_frame,text="FIRST NAME",font=("Courier",20,),fg='black',bg='white')
@@ -113,6 +123,7 @@ class Authenticate:
         #First name entry
         self.firstname_entry  = Entry(self.form_body_frame,textvariable=first_name,)
         self.firstname_entry.place(x=40,y=70,width=250,height=30)
+        
 
         self.last_name = Label(self.form_body_frame,text="LAST NAME",font=("Courier",20,),fg='black',bg='white')
         self.last_name.place(x=360,y=30)
@@ -124,6 +135,7 @@ class Authenticate:
 
         #=====PROFESSION=====#
         profession = StringVar()
+        profession.set("")
 
         self.prof_detail = Label(self.form_body_frame,text="COMPANY/ORGANIZATION",font=("Courier",20,),fg='black',bg='white')
         self.prof_detail.place(x=40,y=130)
@@ -132,28 +144,32 @@ class Authenticate:
         self.prof_detail_entry.place(x=40,y=170,width=580,height=35)
 
         #=====Age====#
-        Age  = IntVar()
+        Age  = StringVar()
+        Age.set("")
+
         self.age = Label(self.form_body_frame,text="AGE",font=("Courier",20,),fg='black',bg='white')
         self.age.place(x=40,y=230)
-        self.age_spinbox = Spinbox(self.form_body_frame,from_=18,to_=60,textvariable=Age)
+        self.age_spinbox = Spinbox(self.form_body_frame,from_=17,to_=60,textvariable=Age)
         self.age_spinbox.place(x=40,y=270)
 
         #===Gender==#
-        gender = IntVar()
+        gender = StringVar()
+        gender.set("")
         self.gender_label = Label(self.form_body_frame,text="GENDER",font=("Courier",20,),fg='black',bg='white')
         self.gender_label.place(x=360,y=230)
 
-        self.male = Radiobutton(self.form_body_frame,text='MALE',variable=gender,value=1,font=("Roman",15,),bg='white')
+        self.male = Radiobutton(self.form_body_frame,text='MALE',variable=gender,value='1',font=("Roman",15,),bg='white')
         self.male.place(x=360,y=270)
 
-        self.female = Radiobutton(self.form_body_frame,text='FEMALE',variable=gender,value=2,font=("Roman",15,),bg='white')
+        self.female = Radiobutton(self.form_body_frame,text='FEMALE',variable=gender,value='2',font=("Roman",15,),bg='white')
         self.female.place(x=460,y=270)
 
-        self.others = Radiobutton(self.form_body_frame,text='OTHERS',variable=gender,value=3,font=("Roman",15,),bg='white')
+        self.others = Radiobutton(self.form_body_frame,text='OTHERS',variable=gender,value='3',font=("Roman",15,),bg='white')
         self.others.place(x=560,y=270)
 
         #Password
         signin_password = StringVar()
+        signin_password.set("")
 
         self.register_password = Label(self.form_body_frame,text="*PASSWORD",font=("Courier",20,),fg='black',bg='white')
         self.register_password.place(x=40,y=310)
@@ -163,6 +179,7 @@ class Authenticate:
 
         #CONFIRM PASSWORD
         confirm_password = StringVar()
+        confirm_password.set("")
 
         self.register_confirm_password = Label(self.form_body_frame,text="CONFIRM PASSWORD",font=("Courier",20,),fg='black',bg='white')
         self.register_confirm_password.place(x=40,y=390)
@@ -172,8 +189,30 @@ class Authenticate:
 
 
         #===SIGUP BUTTON===#
-        self.signup_button = Button(self.form_body_frame,text="SIGN-UP",command=None,bg='black',fg='white',font=("Impact",20,"bold"))
+        self.signup_button = Button(self.form_body_frame,text="SIGN-UP",command=lambda:self.check_credentials(first_name,last_name,profession,Age,gender,signin_password,confirm_password),bg='black',fg='white',font=("Impact",20,"bold"))
         self.signup_button.place(x=250,y=500,height=50,width=150)
+
+
+    def check_credentials(self,a,b,c,d,e,f,g):
+        if f.get()!= g.get():
+            messagebox.showwarning('Password',"Password Doesn't Match!Please Confirm Password")
+        elif f.get()==g.get():
+            name = a.get()+' '+b.get()
+            if(e.get()=='1'):
+                gender  = 'male'
+            elif(e.get()=='2'):
+                gender = 'female'
+            elif(e.get()=='3'):
+                gender = 'Others'
+            else:
+                gender=''
+    
+            
+            self.database.insert_into_db(name,c.get(),d.get(),gender,f.get())
+            
+
+
+
 
 
         
