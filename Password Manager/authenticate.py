@@ -86,8 +86,8 @@ class Authenticate:
         self.signup_frame.resizable(False,False)
 
         
-        # self.bg = ImageTk.PhotoImage(file="bg.jpg")
-        # self.bg_image = Label(self.signup_frame,image=self.bg).place(x=0,y=0,relheight=1,relwidth=1)
+        self.bg = ImageTk.PhotoImage(file="bg.jpg")
+        self.bg_image = Label(self.signup_frame,image=self.bg).place(x=0,y=0,relheight=1,relwidth=1)
 
         self.signin_register_frame = Frame(self.signup_frame,width=700,height=670)
         self.signin_register_frame.propagate(0)
