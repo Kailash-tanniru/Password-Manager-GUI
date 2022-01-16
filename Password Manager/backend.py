@@ -28,7 +28,6 @@ class DB:
             messagebox.showerror("Error","Incorrect Entry")
     
     def retrive(self,x,y):
-        print(x,y)
         try:
             self.con = sqlite3.connect(self.db)
             self.cur = self.con.cursor()
