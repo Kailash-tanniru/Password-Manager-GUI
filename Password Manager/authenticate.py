@@ -53,6 +53,7 @@ class Authenticate:
         self.username_label.place(x=60,y=150)
         #USERNAME LABEL
         self.username_entry = Entry(self.login_frame,textvariable=username,font=("Script",20),bg='#EEEEEE',fg='#0F0E0E',relief='flat',justify='center')
+        self.username_entry.delete(0,END)
         
         self.username_entry.place(x=65,y=190,width=350,height=35)
 
@@ -62,6 +63,7 @@ class Authenticate:
 
         self.password_entry = Entry(self.login_frame,textvariable=password,font=("Script",15,"bold"),bg='#EEEEEE',fg='#0F0E0E',relief='flat',show='X',justify='center')
         self.password_entry.place(x=65,y=310,width=350,height=35)
+        
 
         #===LOGIN BUTTON===#
         #command=lambda:App(self.frame,self.root)
@@ -84,6 +86,9 @@ class Authenticate:
             App(self.frame,self.root)
         else:
             messagebox.showerror("Error","Credentials Error")
+        self.username_entry.delete(0,END)
+        self.password_entry.delete(0,END)
+        
 
     
     def signup_window(self):
@@ -220,6 +225,7 @@ class Authenticate:
     
             
             self.database.insert_into_db(name,c.get(),d.get(),gender,f.get())
+            self.signup_frame.destroy()
             
 
 
