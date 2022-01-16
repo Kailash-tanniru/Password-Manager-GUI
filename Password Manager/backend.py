@@ -26,4 +26,19 @@ class DB:
             
         except Exception as es:
             messagebox.showerror("Error","Incorrect Entry")
-
+    
+    def retrive(self,x,y):
+        print(x,y)
+        try:
+            self.con = sqlite3.connect(self.db)
+            self.cur = self.con.cursor()
+            sql_query = "SELECT username,password FROM usercred;"
+            self.cur.execute(sql_query)
+            records = self.cur.fetchall()
+            for i,j in records:
+                if(i==x and j==y):
+                    return True
+                else:
+                    return False
+        except EXCEPTION as es:
+            messagebox.showerror("Error","Error")

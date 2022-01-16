@@ -1,9 +1,11 @@
 
 from tkinter import *
+from tkinter.tix import Tree
 
 from PIL import ImageTk
 from tkinter import ttk
 from tkinter import font
+from aem import app
 from tkmacosx import Button #if macos
 from PasswordManager import App
 
@@ -62,7 +64,8 @@ class Authenticate:
         self.password_entry.place(x=65,y=310,width=350,height=35)
 
         #===LOGIN BUTTON===#
-        self.submit_button = Button(self.login_frame,text='LOGIN',command=lambda:App(self.frame,self.root),background='#D6E5FA',foreground='black',font=('Roman',20,'bold'),relief=SUNKEN,borderwidth=0,)
+        #command=lambda:App(self.frame,self.root)
+        self.submit_button = Button(self.login_frame,text='LOGIN',command=lambda:self.open_app(username.get(),password.get()),background='#D6E5FA',foreground='black',font=('Roman',20,'bold'),relief=SUNKEN,borderwidth=0,)
         self.submit_button.place(x=160,y=400,height=50,width=150)
 
 
@@ -74,6 +77,13 @@ class Authenticate:
 
         self.forgot_password = Button(self.login_frame,text='Forgot Password?',command=None)
         self.forgot_password.place(x=300,y=530,height=30)
+
+    def open_app(self,x,y):
+        flag = self.database.retrive(x,y)
+        if flag==True:
+            App(self.frame,self.root)
+        else:
+            messagebox.showerror("Error","Credentials Error")
 
     
     def signup_window(self):
