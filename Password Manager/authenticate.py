@@ -20,13 +20,16 @@ class Authenticate:
         self.frame = Frame(self.root,width=w,height=h,bg='#FFCCD2')
         self.frame.propagate(0)
         self.frame.pack()
+        
+
+    
 
         #Create Database
         self.database = DB()
         self.database.create_db()
         # self.bg = ImageTk.PhotoImage(file="bg.jpg")
         # self.bg_image = Label(self.root,image=self.bg).place(x=0,y=0)
-        self.login()        
+        # self.login()        
         
     def login(self):
         username = StringVar()
@@ -36,6 +39,8 @@ class Authenticate:
         self.login_frame.propagate(0)
         self.login_frame.place(x=250,y=80)
 
+        self.user = username.get()
+        self.passw = password.get()
        
     
 
@@ -61,7 +66,7 @@ class Authenticate:
         self.password_label = Label(self.login_frame,text='Password',font=("Courier",20),fg='black',bg='white')
         self.password_label.place(x=60,y=270)
 
-        self.password_entry = Entry(self.login_frame,textvariable=password,font=("Script",15,"bold"),bg='#EEEEEE',fg='#0F0E0E',relief='flat',show='X',justify='center')
+        self.password_entry = Entry(self.login_frame,textvariable=password,font=("Script",15,"bold"),bg='#EEEEEE',fg='#0F0E0E',relief='flat',show='*',justify='center')
         self.password_entry.place(x=65,y=310,width=350,height=35)
         
 
@@ -83,11 +88,20 @@ class Authenticate:
     def open_app(self,x,y):
         flag = self.database.retrive(x,y)
         if flag==True:
-            App(self.frame,self.root)
+            obj = App(x,y,self.frame,self.root)
+            # obj.labels(x,y)
+      
         else:
             messagebox.showerror("Error","Credentials Error")
         self.username_entry.delete(0,END)
         self.password_entry.delete(0,END)
+
+    def get(self):
+        x  =self.user
+        y = self.passw
+        return x,y    
+
+    
         
 
     

@@ -1,6 +1,9 @@
+from cProfile import label
 from tkinter import *
 from tkinter import ttk
 from authenticate import Authenticate
+
+
 
 
 
@@ -14,7 +17,11 @@ if __name__ == "__main__":
     root.configure(bg="yellow")
     # screen_width = root.winfo_screenwidth()
     # screen_height = root.winfo_screenheight()
-    Authenticate(root,width,height)
+    obj =  Authenticate(root,width,height)
+    obj.login()
+   
+    
+    
     
     root.resizable(False,False)
    

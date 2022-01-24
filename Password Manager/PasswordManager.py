@@ -1,17 +1,33 @@
 from tkinter import *
 
+
+
 from tkmacosx import Button
 from create import Create
 from delete import DeleteRecord
+from backend import DB
+import os
+from tkinter import messagebox
+import sqlite3
+import sys
 class App:
-    def __init__(self,root,menuroot):
+    def __init__(self,x,y,root,menuroot):
+        self.user = x
+        self.passw = y
+       
         self.root = root
         self.menuroot = menuroot
         self.app_frame = Frame(self.root,width=1000,height=750,bg='#EEF2FF')
         self.app_frame.propagate(0)
         self.app_frame.pack()
+        self.database = DB()
         self.add_menubar()
+        
         self.main_window()
+        self.labels()
+        
+     
+
     
     def add_menubar(self):
         self.menubar = Menu(self.menuroot)
@@ -94,8 +110,34 @@ class App:
 
         self.passw_text = Label(self.passw_column,text='Password',bg='white',pady=50)
         self.passw_text.pack()
+       
         self.operation_buttons()
+       
     
+
+    def labels(self):
+        
+        try:
+            path = os.path.dirname(os.path.abspath(__file__))
+            self.user = self.user.replace(' ','_')
+        
+            self.db = os.path.join(path,'project.db')
+            self.con = sqlite3.connect(self.db)
+            self.cur = self.con.cursor()
+            self.cur.execute(f'SELECT firstname,websitename,password FROM {self.user}')
+            records = self.cur.fetchall()
+            inc = 1
+            for i,j,l in records:
+               
+                id_label = Label(self.sno_frame,text = inc,bg='#EEEEEE',relief=RIDGE,pady=20).pack(fill=X)
+                name  = Label( self.profile_name,text=i,bg='pink',relief=RIDGE,pady=20).pack(fill=X)
+                web = Label(self.web_frame,text=j,bg='#AEFEFF',relief=RIDGE,pady=20).pack(fill=X)
+                passwor = Label(self.password_frame,text =l,bg='#FFF89A',relief=RIDGE,pady=20,font=("Courier",15)).pack(fill=X)
+                inc+=1
+            
+        except EXCEPTION :
+             sys.exc_clear()
+
     def operation_buttons(self):
         self.operation_frame = Frame(self.bottom_frame,width=600,height=100,bg='yellow',)
         self.operation_frame.propagate(0)
@@ -106,14 +148,18 @@ class App:
         self.holder_panel.grid(row=0,column=1)
 
 
-        self.create = Button(self.operation_frame,text='Create',bg='green',fg='white',command=lambda:Create(self.app_frame))
+        self.create = Button(self.operation_frame,text='Create',bg='green',fg='white',command=lambda:Create(self.app_frame,self.user,self.passw))
         self.create.pack(side=LEFT,expand=YES,fill=BOTH)
+        
 
         self.update = Button(self.operation_frame,text='Update',bg='white',command=None)
         self.update.pack(side=LEFT,expand=YES,fill=BOTH)
 
-        self.delete = Button(self.operation_frame,text="Delete",bg='white',command=lambda:DeleteRecord(self.app_frame))
+        self.delete = Button(self.operation_frame,text="Delete",bg='white',command=lambda:DeleteRecord(self.app_frame,self.user))
         self.delete.pack(side=LEFT,expand=YES,fill=BOTH)
 
         self.logout = Button(self.operation_frame,text='Logout',bg='red',fg='white',command=lambda:self.app_frame.destroy())
         self.logout.pack(side=LEFT,expand=YES,fill=BOTH)
+
+
+        

@@ -1,16 +1,31 @@
+import os
 from tkinter import *
 from tkinter import font
 from tkmacosx import Button
 from tkinter import ttk
 from PIL import ImageTk
+from backend import DB
+import sqlite3
+from tkinter import messagebox
+
 
 class Create:
-    def __init__(self,root):
+    def __init__(self,root,user,passw):
+        self.user = user
+        self.passw = passw
+        self.root  = root
         self.create_window = Toplevel(root)
         self.create_window.geometry("700x700")
         self.create_window.title("Create Records")
         self.create_window.resizable(False,False)
+        #-----Database--#
+        self.database = DB()
+        self.database.createdb_app_data(self.user)
+        #----------------#
+        # self.display_items()
         self.Create_page()
+
+        
 
         self.create_window.mainloop()
 
@@ -54,5 +69,20 @@ class Create:
         self.note_name_entry = ttk.Entry(self.page_frame,textvariable=note)
         self.note_name_entry.place(x=70,y=450,width=500,height=70)
 
-        self.create_button = Button(self.page_frame,command=None,text="Create",bg='black',fg='white',font=("Impact",20,"bold"))
+        self.create_button = Button(self.page_frame,command=lambda:self.insert_data(self.user,self.passw,profile_name.get(),website_name.get(),password_name.get(),note.get()),text="Create",bg='black',fg='white',font=("Impact",20,"bold"))
         self.create_button.place(x=230,y=600,width=200)
+    def insert_data(self,u,p,x,y,z,n):
+      
+        key = self.database.insert_app_data(u,p,x,y,z,n)
+        self.create_window.destroy()
+        messagebox.showinfo("Security","For Security Reason We are logging off!")
+        self.root.destroy()
+        
+   
+        
+    
+  
+        
+        
+
+    
