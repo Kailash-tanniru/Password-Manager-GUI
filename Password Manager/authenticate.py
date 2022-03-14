@@ -17,7 +17,7 @@ class Authenticate:
     def __init__(self,root,w,h):
         self.root = root
         
-        self.frame = Frame(self.root,width=w,height=h,bg='#FFCCD2')
+        self.frame = Frame(self.root,width=w,height=h)
         self.frame.propagate(0)
         self.frame.pack()
         
@@ -29,6 +29,9 @@ class Authenticate:
         self.database.create_db()
         # self.bg = ImageTk.PhotoImage(file="bg.jpg")
         # self.bg_image = Label(self.root,image=self.bg).place(x=0,y=0)
+
+        self.bg = ImageTk.PhotoImage(file="bg2.jpg")
+        self.bg_image = Label(self.frame,image=self.bg).place(x=0,y=0,relheight=1,relwidth=1)
         # self.login()        
         
     def login(self):
@@ -41,6 +44,7 @@ class Authenticate:
 
         self.user = username.get()
         self.passw = password.get()
+
        
     
 
@@ -71,7 +75,7 @@ class Authenticate:
         
 
         #===LOGIN BUTTON===#
-        #command=lambda:App(self.frame,self.root)
+     
         self.submit_button = Button(self.login_frame,text='LOGIN',command=lambda:self.open_app(username.get(),password.get()),background='#D6E5FA',foreground='black',font=('Roman',20,'bold'),relief=SUNKEN,borderwidth=0,)
         self.submit_button.place(x=160,y=400,height=50,width=150)
 
